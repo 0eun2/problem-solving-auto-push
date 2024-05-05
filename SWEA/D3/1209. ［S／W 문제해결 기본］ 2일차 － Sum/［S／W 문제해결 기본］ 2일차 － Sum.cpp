@@ -6,40 +6,20 @@ using namespace std;
 const int N = 100;
 
 int calculate(vector<vector<int>> &v) {
-    int ans = 0, sum = 0;
+    int ans = 0, row_sum = 0, col_sum = 0, r_sum = 0, l_sum = 0;    // 행, 열, 우하향, 좌하향 대각선
 
-    // 행
     for (int i = 0; i < N; i++) {
-        sum = 0;
+        r_sum += v[i][i];   // 우하향 대각선
+        l_sum += v[i][N - 1 - i];   // 좌하향 대각선
         for (int j = 0; j < N; j++) {
-            sum += v[i][j];
+            row_sum += v[i][j]; // 행
+            col_sum += v[j][i]; // 열
         }
-        ans = max(sum, ans);
+        ans = max(ans, max(row_sum, col_sum));
+        row_sum = 0;
+        col_sum = 0;
     }
-
-    // 열
-    for (int i = 0; i < N; i++) {
-        sum = 0;
-        for (int j = 0; j < N; j++) {
-            sum += v[j][i];
-        }
-        ans = max(sum, ans);
-    }
-
-    // 우하향 대각선
-    sum = 0;
-    for (int i = 0; i < N; i++) {
-        sum += v[i][i];
-    }
-    ans = max(sum, ans);
-
-    // 좌하향 대각선
-    sum = 0;
-    for (int i = 0; i < N; i++) {
-        sum += v[i][N - 1 - i];
-    }
-    ans = max(sum, ans);
-
+    ans = max(ans, max(l_sum, r_sum));
     return ans;
 }
 
