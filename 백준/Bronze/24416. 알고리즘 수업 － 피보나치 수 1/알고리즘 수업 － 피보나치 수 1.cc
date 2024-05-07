@@ -3,7 +3,7 @@
 
 using namespace std;
 
-int n, cnt1, cnt2;
+int cnt1, cnt2;
 
 int fib(int n) {    // 재귀
     if (n == 1 || n == 2) {
@@ -12,7 +12,7 @@ int fib(int n) {    // 재귀
     } else return (fib(n - 1) + fib(n - 2));
 }
 
-int fibonacci(int n) {  //dp
+int fibonacci(int n) {  // dp
     vector<int> f(n + 1, 0);
 
     f[1] = f[2] = 1;
