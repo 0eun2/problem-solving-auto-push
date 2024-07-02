@@ -1,32 +1,25 @@
 const readline = require('readline');
 
-function solution(c, v){
+(async () => {
+	let rl = readline.createInterface({ input: process.stdin });
+	let input = [];
+	for await (const line of rl) {
+		input.push(line.split(' '));
+		if(!line) rl.close();
+	}	
+	const trade = input.slice(1);
+	console.log(solution(trade));
+	
+	process.exit();
+})();
+
+function solution(trade){
 	let money = 0;
-	for(let i = 0; i < c.length; i++){
-		if(c[i] === "in") money += v[i];
-		else money -= v[i];
+	for(const [c, v] of trade){
+		if(c === "in") money += Number(v);
+		else money -= Number(v);
 		
 		if(money < 0) return "fail";
 	}
 	return "success";
 }
-
-(async () => {
-	let rl = readline.createInterface({ input: process.stdin });
-	
-	let n = null;
-	let c = [], v = [];
-	
-	for await (const line of rl) {
-		if(!n) n = line;
-		else{
-			const input = line.split(' ');
-			c.push(input[0]);
-			v.push(parseInt(input[1]));
-			if(--n === 0) rl.close();
-		}
-	}
-	
-	console.log(solution(c, v));
-	process.exit();
-})();
