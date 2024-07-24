@@ -1,3 +1,3 @@
 function solution(num, n) {
-    return Number(!(num % n));
+    return num % n ? 0 : 1;
 }
