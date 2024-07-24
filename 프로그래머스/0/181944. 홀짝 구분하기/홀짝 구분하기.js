@@ -10,6 +10,6 @@ rl.on('line', function (line) {
     input = line.split(' ');
 }).on('close', function () {
     n = Number(input[0]);
-    if(n % 2) console.log(`${n} is odd`);
-    else console.log(`${n} is even`);
+    if (n % 2) console.log(`${n} is odd`);
+    else console.log(`${n} is even`); 
 });
