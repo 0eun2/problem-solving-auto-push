@@ -1,14 +1,13 @@
 function solution(arr) {
-    let minNum = 1024;
+    let num = 1;
     
-    for(let i = 0; i <= 10; i++){
-        if(arr.length <= Math.pow(2, i)){
-            minNum = Math.min(minNum, Math.pow(2, i) - arr.length);
-        }
+    while (num < arr.length){
+        num *= 2;
     }
     
-    while(minNum--)
+    while (arr.length !== num){
         arr.push(0);
+    }
     
     return arr;
 }
