@@ -11,11 +11,9 @@ rl.on('line', function (line) {
 }).on('close',function(){
     str = input[0];
     let result = [];
-    for(let i = 0; i < str.length; i++){
-        if(str[i] === str[i].toUpperCase())
-            result.push(str[i].toLowerCase());
-        else
-            result.push(str[i].toUpperCase());
+    for(let i of str){
+        if(i === i.toUpperCase()) result.push(i.toLowerCase());
+        else result.push(i.toUpperCase());
     }
     console.log(result.join(''));
 });
