@@ -9,6 +9,5 @@ function solution(code) {
             answer += code[idx];
     }
     
-    if (answer === '') return "EMPTY"
-    return answer;
+    return answer.length > 0 ? answer : "EMPTY";
 }
