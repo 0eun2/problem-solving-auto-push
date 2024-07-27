@@ -1,3 +1,9 @@
 function solution(number) {
-    return BigInt(number) % BigInt(9);
+    var answer = 0;
+    
+    for (let i of number) {
+        answer += Number(i);
+    }
+    
+    return answer % 9;
 }
