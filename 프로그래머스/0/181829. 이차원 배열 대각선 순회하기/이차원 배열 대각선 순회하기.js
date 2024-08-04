@@ -1,4 +1,11 @@
 function solution(board, k) {
-    console.log(board.filter((b, i) => i === i));
-    return board.map((b, i) => b.filter((_, j) => i + j <= k)).reduce((a, c) => [...a, ...c], []).reduce((a, c) => a + c);
+    var answer = 0;
+    
+    for (let i = 0; i < board.length; i++) {
+        for (let j = 0; j < board[0].length; j++) {
+            if (i + j <= k) answer += board[i][j];
+        }
+    }
+    
+    return answer;
 }
