@@ -1,8 +1,10 @@
 function solution(picture, k) {
     var answer = [];
     
-    picture = picture.map(v => [...v].map(c => c.repeat(k)).join(''));
-    picture.forEach(v => answer = [...answer, ...new Array(k).fill(v)]);
+    picture.map(v => {
+        const cur = [...v].map(c => c.repeat(k)).join('');
+        for (let i = 0; i < k; i ++) answer.push(cur);
+    });
     
     return answer;
 }
