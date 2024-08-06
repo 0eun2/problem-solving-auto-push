@@ -1,9 +1,9 @@
 function solution(n) {
     const move = [[0, 1], [1, 0], [0, -1], [-1, 0]];
-    const answer = Array.from(Array(n), () => Array(n).fill(0))
-  
+    const answer = Array.from(new Array(n), () => new Array(n).fill(0));
     let x = 0, y = 0, dir = 0, num = 1;
-    while(num <= n**2) {
+    
+    while (num <= n * n) {
         answer[x][y] = num;
         let nextX = x + move[dir][0];
         let nextY = y + move[dir][1];
@@ -16,5 +16,6 @@ function solution(n) {
         y = nextY;
         num++;
     }
+    
     return answer;
 }
