@@ -8,26 +8,20 @@ int main() {
     cin >> T;
 
     for (int test_case = 1; test_case <= T; ++test_case) {
-        string origin, init = "";
-        int cnt = 0;
-        
+        string origin;
+        int ans = 0;
+        char temp = '0';
+
         cin >> origin;
 
-        for (int i = 0; i < origin.length(); i++) {
-            init += '0';
+        for (char c: origin) {
+            if (c == temp) continue;
+
+            temp = c;
+            ans++;
         }
 
-        for (int i = 0; i < origin.length(); i++) {
-            if (origin[i] == init[i]) continue;
-
-            for (int j = i; j < origin.length(); j++) {
-                init[j] = origin[i];
-            }
-
-            cnt++;
-        }
-
-        cout << '#' << test_case << ' ' << cnt << '\n';
+        cout << '#' << test_case << ' ' << ans << '\n';
     }
 
     return 0;
