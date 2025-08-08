@@ -22,7 +22,7 @@ class Main {
 				dp[i][j] = dp[i][j - 1] + arr[i][j];
 			}
 		}
-		
+
 		StringBuilder sb = new StringBuilder();
 		while (m-- > 0) {
 			st = new StringTokenizer(br.readLine());
@@ -30,10 +30,10 @@ class Main {
 			int y1 = Integer.parseInt(st.nextToken());
 			int x2 = Integer.parseInt(st.nextToken());
 			int y2 = Integer.parseInt(st.nextToken());
-			
+
 			int ans = 0;
 			for (int i = x1; i <= x2; i++) {
-				ans += dp[i][y2] - dp[i][y1] + arr[i][y1];
+				ans += dp[i][y2] - dp[i][y1 - 1];
 			}
 			sb.append(ans).append("\n");
 		}
