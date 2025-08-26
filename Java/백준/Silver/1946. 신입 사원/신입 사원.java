@@ -18,12 +18,11 @@ public class Main {
 				arr[idx] = Integer.parseInt(st.nextToken());
 			}
 
-			int ans = n;
+			int ans = 1;
 			int minRank = arr[1];
 			for (int i = 2; i <= n; i++) {
-				if (minRank < arr[i]) {
-					ans--;
-				} else {
+				if (minRank > arr[i]) {
+					ans++;
 					minRank = arr[i];
 				}
 			}
