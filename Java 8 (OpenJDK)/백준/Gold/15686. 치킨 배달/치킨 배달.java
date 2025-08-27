@@ -78,7 +78,7 @@ public class Main {
 			selected[i] = true;
 			dfs(i + 1, cnt + 1);
 			selected[i] = false;
-			dfs(i + 1, cnt);
+			//dfs(i + 1, cnt);
 		}
 	}
 }
