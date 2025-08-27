@@ -3,53 +3,33 @@ import java.util.*;
 
 public class Solution {
 	static class Edge {
-		int n1, n2;
+		int n;
 		long w;
 
-		public Edge(int n1, int n2, long w) {
-			this.n1 = n1;
-			this.n2 = n2;
+		public Edge(int n, long w) {
+			this.n = n;
 			this.w = w;
 		}
 	}
 
-	static int[] parent;
+	static int n;
+	static List<Edge>[] graph;
 
-	static int find(int a) {
-		if (parent[a] < 0)
-			return a;
-		return parent[a] = find(parent[a]);
-	}
-
-	static boolean union(int a, int b) {
-		int pa = find(a);
-		int pb = find(b);
-
-		if (pa == pb)
-			return false;
-
-		if (parent[pa] < parent[pb]) {
-			parent[pa] += parent[pb];
-			parent[pb] = pa;
-		} else {
-			parent[pb] += parent[pa];
-			parent[pa] = pb;
-		}
-
-		return true;
-	}
-
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringBuilder sb = new StringBuilder();
 
 		int t = Integer.parseInt(br.readLine());
 
 		for (int tc = 1; tc <= t; tc++) {
-			int n = Integer.parseInt(br.readLine()); // 섬의 개수
-			parent = new int[n + 1];
+			n = Integer.parseInt(br.readLine());
 			long[] x = new long[n];
 			long[] y = new long[n];
+			graph = new ArrayList[n];
+
+			for (int i = 0; i < n; i++) {
+				graph[i] = new ArrayList<>();
+			}
 
 			StringTokenizer st = new StringTokenizer(br.readLine());
 			for (int i = 0; i < n; i++) {
@@ -63,29 +43,51 @@ public class Solution {
 
 			double e = Double.parseDouble(br.readLine());
 
-			Arrays.fill(parent, -1);
-
-			PriorityQueue<Edge> pq = new PriorityQueue<>((e1, e2) -> Long.compare(e1.w, e2.w));
 			for (int i = 0; i < n - 1; i++) {
 				for (int j = i + 1; j < n; j++) {
-					pq.add(new Edge(i, j, (x[i] - x[j]) * (x[i] - x[j]) + (y[i] - y[j]) * (y[i] - y[j])));
+					long cost = (x[i] - x[j]) * (x[i] - x[j]) + (y[i] - y[j]) * (y[i] - y[j]);
+					graph[i].add(new Edge(j, cost));
+					graph[j].add(new Edge(i, cost));
 				}
 			}
 
-			int cnt = 0;
-			long ans = 0;
-			while (!pq.isEmpty()) {
-				Edge edge = pq.poll();
-				if (!union(edge.n1, edge.n2))
-					continue;
-				ans += edge.w;
-				if (++cnt == n - 1)
-					break;
-			}
+			sb.append("#").append(tc).append(" ").append(Math.round(prim(0) * e)).append("\n");
+		}
+		System.out.println(sb);
+	}
 
-			sb.append("#").append(tc).append(" ").append(Math.round(ans * e)).append("\n");
+	static long prim(int start) {
+		int cnt = 0;
+		long ans = 0;
+		boolean[] visited = new boolean[n];
+		long[] minEdge = new long[n];
+		PriorityQueue<Edge> pq = new PriorityQueue<>((e1, e2) -> Long.compare(e1.w, e2.w));
+
+		Arrays.fill(minEdge, Long.MAX_VALUE);
+		pq.offer(new Edge(start, 0));
+		minEdge[start] = 0;
+
+		while (!pq.isEmpty()) {
+			Edge cur = pq.poll();
+
+			if (visited[cur.n])
+				continue;
+
+			visited[cur.n] = true;
+			ans += cur.w;
+
+			if (++cnt == n)
+				break;
+
+			for (Edge next : graph[cur.n]) {
+				if (!visited[next.n] && minEdge[next.n] > next.w) {
+					minEdge[next.n] = next.w;
+					pq.add(next);
+				}
+
+			}
 		}
 
-		System.out.println(sb);
+		return ans;
 	}
 }
