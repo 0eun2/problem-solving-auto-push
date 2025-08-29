@@ -16,10 +16,10 @@ public class Main {
 		st = new StringTokenizer(br.readLine());
 		for (int i = 0; i < n; i++) {
 			arr[i] = Long.parseLong(st.nextToken());
-			right = Math.max(right, arr[i]) + 1;
+			right = Math.max(right, arr[i]);
 		}
 
-		while (left < right) {
+		while (left <= right) {
 			long mid = (left + right) / 2;
 			long sum = 0;
 
@@ -32,10 +32,10 @@ public class Main {
 			if (sum >= m) {
 				left = mid + 1;
 			} else {
-				right = mid;
+				right = mid - 1;
 			}
 		}
 
-		System.out.println(left - 1);
+		System.out.println(right);
 	}
 }
