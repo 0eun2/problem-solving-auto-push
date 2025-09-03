@@ -55,7 +55,7 @@ public class Main {
 		int nr = r - dr[dir];
 		int nc = c - dc[dir];
 
-		if (nr < 0 || nc < 0 || nr >= n || nc >= m || arr[nr][nc] == 1)
+		if (arr[nr][nc] == 1)
 			return false;
 
 		r = nr;
@@ -69,7 +69,7 @@ public class Main {
 		int nr = r + dr[dir];
 		int nc = c + dc[dir];
 
-		if (nr < 0 || nc < 0 || nr >= n || nc >= m || arr[nr][nc] != 0)
+		if (arr[nr][nc] != 0)
 			return;
 
 		r = nr;
