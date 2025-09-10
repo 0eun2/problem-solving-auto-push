@@ -32,9 +32,13 @@ public class Solution {
 	}
 
 	static void floydWarshall() {
-		for (int k = 0; k < n; k++) {
-			for (int i = 0; i < n; i++) {
-				for (int j = 0; j < n; j++) {
+		for (int k = 0; k < n; k++) { // 경유
+			for (int i = 0; i < n; i++) { // 출발
+				if (k == i)
+					continue;
+				for (int j = 0; j < n; j++) { // 도착
+					if (i == j || k == j)
+						continue;
 					if (graph[i][j] == 1)
 						continue;
 					if (graph[i][k] != 0 && graph[k][j] != 0) {
