@@ -67,17 +67,14 @@ public class Main {
 
 	static int dijkstraFox() {
 		PriorityQueue<Edge> pq = new PriorityQueue<>((e1, e2) -> Long.compare(e1.w, e2.w));
-		boolean[] visited = new boolean[n + 1];
 
 		pq.offer(new Edge(1, 0));
 
 		while (!pq.isEmpty()) {
 			Edge cur = pq.poll();
 
-			if (visited[cur.to] || fox[cur.to] < cur.w)
+			if (fox[cur.to] < cur.w)
 				continue;
-
-			visited[cur.to] = true;
 
 			for (Edge next : graph[cur.to]) {
 				if (fox[next.to] > next.w + cur.w) {
@@ -91,17 +88,14 @@ public class Main {
 
 	static int dijkstraWolf() {
 		PriorityQueue<Edge> pq = new PriorityQueue<>((e1, e2) -> Long.compare(e1.w, e2.w));
-		boolean[][] visited = new boolean[2][n + 1];
 
 		pq.offer(new Edge(1, 0, 0));
 
 		while (!pq.isEmpty()) {
 			Edge cur = pq.poll();
 
-			if (visited[cur.state][cur.to] || cur.w > wolf[cur.state][cur.to])
+			if (cur.w > wolf[cur.state][cur.to])
 				continue;
-
-			visited[cur.state][cur.to] = true;
 
 			int nextState = 1 - cur.state;
 			for (Edge next : graph[cur.to]) {
@@ -122,3 +116,4 @@ public class Main {
 	}
 
 }
+
