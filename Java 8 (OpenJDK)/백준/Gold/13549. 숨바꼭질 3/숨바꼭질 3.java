@@ -32,7 +32,9 @@ public class Main {
 
 		while (!pq.isEmpty()) {
 			Point cur = pq.poll();
-			//System.out.println(cur.x + " " + cur.time);
+			
+			if (cur.time > dist[cur.x])
+				continue;
 
 			if (cur.x == k)
 				return dist[k];
