@@ -2,46 +2,73 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
+	static class Edge {
+		int to, w;
 
-	static final int INF = 100000001;
+		public Edge(int to, int w) {
+			this.to = to;
+			this.w = w;
+		}
+	}
+
+	static int n;
+	static List<Edge>[] edgeList;
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-		int n = Integer.parseInt(br.readLine()); // 도시 수
+		n = Integer.parseInt(br.readLine()); // 도시 수
 		int m = Integer.parseInt(br.readLine()); // 버스 수
+		edgeList = new ArrayList[n + 1];
 
-		int[][] graph = new int[n + 1][n + 1];
-
-		for (int i = 1; i <= n; i++) {
-			for (int j = 1; j <= n; j++) {
-				if (i == j)
-					continue;
-				graph[i][j] = INF;
-			}
+		for (int i = 0; i <= n; i++) {
+			edgeList[i] = new ArrayList<>();
 		}
 
 		while (m-- > 0) {
 			StringTokenizer st = new StringTokenizer(br.readLine());
-			int s = Integer.parseInt(st.nextToken());
-			int e = Integer.parseInt(st.nextToken());
+			int from = Integer.parseInt(st.nextToken());
+			int to = Integer.parseInt(st.nextToken());
 			int w = Integer.parseInt(st.nextToken());
 
-			graph[s][e] = Math.min(graph[s][e], w);
-		} // 입력 끝
+			edgeList[from].add(new Edge(to, w));
+		}
 
-		for (int k = 1; k <= n; k++) {
-			for (int i = 1; i <= n; i++) {
-				for (int j = 1; j <= n; j++) {
-					graph[i][j] = Math.min(graph[i][k] + graph[k][j], graph[i][j]);
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int s = Integer.parseInt(st.nextToken());
+		int e = Integer.parseInt(st.nextToken());
+		// 입력 끝
+
+		System.out.println(dijkstra(s, e));
+	}
+
+	static int dijkstra(int s, int e) {
+		int[] dist = new int[n + 1];
+		PriorityQueue<Edge> pq = new PriorityQueue<>((p1, p2) -> p1.w - p2.w);
+
+		for (int i = 1; i <= n; i++) {
+			Arrays.fill(dist, Integer.MAX_VALUE);
+		}
+
+		pq.offer(new Edge(s, 0));
+
+		while (!pq.isEmpty()) {
+			Edge cur = pq.poll();
+
+			if (cur.to == e)
+				return dist[cur.to];
+
+			if (dist[cur.to] < cur.w)
+				continue;
+
+			for (Edge next : edgeList[cur.to]) {
+				if (dist[next.to] > cur.w + next.w) {
+					dist[next.to] = cur.w + next.w;
+					pq.add(new Edge(next.to, dist[next.to]));
 				}
 			}
 		}
 
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		int start = Integer.parseInt(st.nextToken());
-		int end = Integer.parseInt(st.nextToken());
-
-		System.out.println(graph[start][end]);
+		return 0;
 	}
 }
