@@ -2,15 +2,6 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-	static class Point {
-		int pos, cnt;
-
-		public Point(int pos, int cnt) {
-			this.pos = pos;
-			this.cnt = cnt;
-		}
-	}
-
 	static int[] map;
 
 	public static void main(String[] args) throws IOException {
@@ -42,35 +33,38 @@ public class Main {
 	}
 
 	static int bfs() {
-		PriorityQueue<Point> pq = new PriorityQueue<>((p1, p2) -> p1.cnt - p2.cnt);
-		boolean[] visited = new boolean[101];
+		Queue<Integer> q = new ArrayDeque<>();
+		int[] dist = new int[101];
 
-		pq.offer(new Point(1, 0));
-		visited[1] = true;
+		Arrays.fill(dist, -1);
 
-		while (!pq.isEmpty()) {
-			Point cur = pq.poll();
+		q.offer(1);
+		dist[1] = 0;
+
+		while (!q.isEmpty()) {
+			int cur = q.poll();
 
 			for (int i = 1; i <= 6; i++) {
-				int npos = cur.pos + i;
-
-				if (visited[npos])
-					continue;
-
-				if (npos == 100) {
-					return cur.cnt + 1;
-				}
+				int npos = cur + i;
+				if (npos > 100)
+					break;
 
 				if (map[npos] != 0) {
-					visited[npos] = true;
 					npos = map[npos];
 				}
 
-				pq.offer(new Point(npos, cur.cnt + 1));
-				visited[npos] = true;
+				if (dist[npos] != -1)
+					continue;
+
+				dist[npos] = dist[cur] + 1;
+
+				if (npos == 100) {
+					return dist[npos];
+				}
+
+				q.offer(npos);
 			}
 		}
-
-		return 1;
+		return dist[100];
 	}
 }
