@@ -6,21 +6,24 @@ public class Main {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 		int n = Integer.parseInt(br.readLine());
-		String p = "";
-		for (int i = 0; i < n; i++) {
-			p += "IO";
-		}
-		p += "I";
-
 		int m = Integer.parseInt(br.readLine());
 		String s = br.readLine();
 
-		int left = 0, right = n * 2, ans = 0;
-		while (right++ < m) {
-			if (s.substring(left, right).equals(p)) {
-				ans++;
+		int cnt = 0, ans = 0;
+		for (int i = 1; i < m - 1;) {
+			if (s.charAt(i - 1) == 'I' && s.charAt(i) == 'O' && s.charAt(i + 1) == 'I') { // "IOI"
+				cnt++;
+
+				if (cnt == n) {
+					ans++;
+					cnt -= 1;
+				}
+
+				i += 2;
+			} else {
+				i++;
+				cnt = 0;
 			}
-			left++;
 		}
 
 		System.out.println(ans);
