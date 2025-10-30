@@ -25,6 +25,9 @@ public class Main {
 		if (a == b)
 			return 1;
 
+		if (b % 2 != 0 && b % 10 != 1)
+			return -1;
+
 		PriorityQueue<Pair> pq = new PriorityQueue<>((p1, p2) -> Integer.compare(p1.cnt, p2.cnt));
 
 		pq.add(new Pair(b, 1)); // 역추적
