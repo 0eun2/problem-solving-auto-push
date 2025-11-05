@@ -2,12 +2,20 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
+	static class Point {
+		int r, c;
+
+		public Point(int r, int c) {
+			this.r = r;
+			this.c = c;
+		}
+	}
+
 	static int n, left, right;
-	static int[][] arr;
-	static boolean[][] visited;
+	static int[][] map;
+
 	static int[] dr = { -1, 1, 0, 0 };
 	static int[] dc = { 0, 0, -1, 1 };
-	static boolean moved;
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -16,30 +24,33 @@ public class Main {
 		n = Integer.parseInt(st.nextToken());
 		left = Integer.parseInt(st.nextToken());
 		right = Integer.parseInt(st.nextToken());
-		arr = new int[n][n];
+
+		map = new int[n][n];
 
 		for (int i = 0; i < n; i++) {
 			st = new StringTokenizer(br.readLine());
 			for (int j = 0; j < n; j++) {
-				arr[i][j] = Integer.parseInt(st.nextToken());
+				map[i][j] = Integer.parseInt(st.nextToken());
 			}
-		}
+		} // 입력 끝
 
 		int ans = 0;
 
 		while (true) {
-			visited = new boolean[n][n];
-			moved = false;
+			boolean moved = false;
+			boolean[][] visited = new boolean[n][n];
 
 			for (int i = 0; i < n; i++) {
 				for (int j = 0; j < n; j++) {
-					if (!visited[i][j]) {
-						List<int[]> union = new ArrayList<>();
-						int sum = dfs(i, j, union);
-						if (union.size() > 1) {
-							move(union, sum);
-							moved = true;
-						}
+					if (visited[i][j])
+						continue;
+
+					List<Point> selected = new ArrayList<>();
+					int sum = bfs(i, j, visited, selected);
+
+					if (selected.size() > 1) {
+						move(sum, selected);
+						moved = true;
 					}
 				}
 			}
@@ -52,32 +63,45 @@ public class Main {
 		System.out.println(ans);
 	}
 
-	static int dfs(int r, int c, List<int[]> union) {
+	static int bfs(int r, int c, boolean[][] visited, List<Point> selected) {
+		Queue<Point> q = new ArrayDeque<>();
+
+		q.add(new Point(r, c));
 		visited[r][c] = true;
-		union.add(new int[] { r, c });
-		int sum = arr[r][c];
+		selected.add(new Point(r, c));
 
-		for (int i = 0; i < 4; i++) {
-			int nr = r + dr[i];
-			int nc = c + dc[i];
+		int sum = map[r][c];
 
-			if (nr < 0 || nr >= n || nc < 0 || nc >= n || visited[nr][nc])
-				continue;
+		while (!q.isEmpty()) {
+			Point cur = q.poll();
 
-			int diff = Math.abs(arr[r][c] - arr[nr][nc]);
-			if (diff >= left && diff <= right) {
-				sum += dfs(nr, nc, union);
+			for (int i = 0; i < 4; i++) {
+				int nr = cur.r + dr[i];
+				int nc = cur.c + dc[i];
+
+				if (nr < 0 || nc < 0 || nr >= n || nc >= n || visited[nr][nc])
+					continue;
+
+				int diff = Math.abs(map[cur.r][cur.c] - map[nr][nc]);
+				if (diff < left || diff > right)
+					continue;
+
+				sum += map[nr][nc];
+				q.add(new Point(nr, nc));
+				visited[nr][nc] = true;
+				selected.add(new Point(nr, nc));
 			}
 		}
 
 		return sum;
 	}
 
-	static void move(List<int[]> union, int sum) {
-		int avg = sum / union.size();
+	static void move(int sum, List<Point> selected) {
+		int avg = sum / selected.size();
 
-		for (int[] pos : union) {
-			arr[pos[0]][pos[1]] = avg;
+		for (Point cur : selected) {
+			map[cur.r][cur.c] = avg;
 		}
 	}
+
 }
