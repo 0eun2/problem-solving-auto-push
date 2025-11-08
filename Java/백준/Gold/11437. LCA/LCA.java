@@ -1,74 +1,81 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 public class Main {
-	static int n;
-	static int[] parent;
-	static int[] depth;
-	static List<Integer>[] edge;
+    static int[] parent, depth;
+    static List<Integer>[] adj;
 
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder sb = new StringBuilder();
+        int n = Integer.parseInt(br.readLine());
 
-		n = Integer.parseInt(br.readLine()); // 노드 개수
-		parent = new int[n + 1];
-		depth = new int[n + 1];
-		edge = new ArrayList[n + 1];
-		for (int i = 0; i <= n; i++) {
-			edge[i] = new ArrayList<>();
-		}
+        parent = new int[n + 1];
+        depth = new int[n + 1];
+        adj = new ArrayList[n + 1];
 
-		for (int i = 0; i < n - 1; i++) {
-			StringTokenizer st = new StringTokenizer(br.readLine());
-			int a = Integer.parseInt(st.nextToken());
-			int b = Integer.parseInt(st.nextToken());
+        for (int i = 1; i <= n; i++) {
+            adj[i] = new ArrayList<>();
+        }
 
-			edge[a].add(b);
-			edge[b].add(a);
-		} // 입력1 끝
+        for (int i = 0; i < n - 1; i++) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
 
-		dfs(1, 1, 0); // 부모, 깊이 저장
+            adj[a].add(b);
+            adj[b].add(a);
+        }
 
-		StringBuilder sb = new StringBuilder();
-		int m = Integer.parseInt(br.readLine());
+        bfs();
 
-		while (m-- > 0) {
-			StringTokenizer st = new StringTokenizer(br.readLine());
-			int a = Integer.parseInt(st.nextToken());
-			int b = Integer.parseInt(st.nextToken());
+        int m = Integer.parseInt(br.readLine());
+        for (int i = 0; i < m; i++) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+            sb.append(lca(a, b)).append("\n");
+        }
 
-			sb.append(lca(a, b)).append("\n");
-		} // 입력2 & 연산
+        System.out.println(sb);
+    }
 
-		System.out.println(sb);
-	}
+    static void bfs() {
+        Queue<Integer> q = new ArrayDeque<>();
+        q.add(1);
+        parent[1] = 0;
+        depth[1] = 0;
 
-	static void dfs(int cur, int p, int d) {
-		parent[cur] = p;
-		depth[cur] = d;
+        while (!q.isEmpty()) {
+            int c = q.poll();
 
-		for (int next : edge[cur]) {
-			if (next == p)
-				continue;
+            for (int nxt : adj[c]) {
+                if(parent[c] != nxt) {
+                    q.add(nxt);
+                    parent[nxt] = c;
+                    depth[nxt] = depth[c] + 1;
+                }
+            }
+        }
+    }
 
-			dfs(next, cur, d + 1);
-		}
-	}
 
-	static int lca(int a, int b) {
-		// 깊이 맞추기
-		while (depth[a] < depth[b])
-			b = parent[b];
+    static int lca(int a, int b) {
+        if (depth[a] > depth[b]) {
+            int temp = b;
+            b = a;
+            a = temp;
+        }
 
-		while (depth[a] > depth[b])
-			a = parent[a];
+        while (depth[a] != depth[b]) {
+            b = parent[b];
+        }
 
-		// 공통 부모 찾기
-		while (a != b) {
-			a = parent[a];
-			b = parent[b];
-		}
+        while (a != b) {
+            a = parent[a];
+            b = parent[b];
+        }
 
-		return a;
-	}
+        return a;
+    }
 }
