@@ -14,30 +14,25 @@ public class Main {
 
         Arrays.sort(arr);
 
-        int sum = Integer.MAX_VALUE;
+        int min = Integer.MAX_VALUE;
         int ans1 = 0, ans2 = 0;
 
         int left = 0, right = n - 1;
         while (left < right) {
-            int l = arr[left], r = arr[right];
+            int sum = arr[left] + arr[right];
 
-            if (Math.abs(l + r) < sum) {
-                sum = Math.abs(r + l);
-                ans1 = l;
-                ans2 = r;
+            if (Math.abs(sum) < min) {
+                min = Math.abs(sum);
+                ans1 = arr[left];
+                ans2 = arr[right];
             }
 
-            if (l + r < 0) {
+            if (sum < 0) {
                 left++;
-                continue;
-            }
-
-            if (l + r > 0) {
+            } else if (sum > 0) {
                 right--;
-                continue;
-            }
-
-            break;
+            } else
+                break;
         }
 
         StringBuilder sb = new StringBuilder();
